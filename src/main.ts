@@ -5,6 +5,7 @@ import {
   NestFastifyApplication,
 } from '@nestjs/platform-fastify';
 import { PrismaService } from './prisma/prisma.service';
+import { VersioningType, VERSION_NEUTRAL } from '@nestjs/common';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestFastifyApplication>(
@@ -13,6 +14,11 @@ async function bootstrap() {
       logger: true,
     }),
   );
+
+  app.enableVersioning({
+    defaultVersion: VERSION_NEUTRAL,
+    type: VersioningType.URI,
+  });
 
   // 跨域设置
   app.enableCors({
