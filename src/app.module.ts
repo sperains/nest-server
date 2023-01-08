@@ -3,7 +3,6 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { CoreModule } from './core/core.module';
 import { EventsGateway } from './gateway/events.gateway';
-import { PrismaModule } from './prisma/prisma.module';
 import { UserModule } from './user/user.module';
 import { ConfigModule } from './config/config.module';
 import { WinstonModule } from 'nest-winston';
@@ -13,13 +12,11 @@ import 'winston-daily-rotate-file';
 @Module({
   imports: [
     CoreModule,
-    PrismaModule,
     UserModule,
     ConfigModule,
     WinstonModule.forRoot({
       level: 'info',
       format: format.json(),
-      defaultMeta: { service: 'user-service' },
       transports: [
         new transports.File({
           filename: 'logs/error.log',
@@ -34,6 +31,7 @@ import 'winston-daily-rotate-file';
           zippedArchive: true,
           maxSize: '20m',
           maxFiles: '30d',
+          level: 'error',
         }),
       ],
     }),
