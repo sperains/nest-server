@@ -11,10 +11,8 @@ import { PrismaService } from './services/prisma.service';
     { provide: APP_FILTER, useClass: AllExceptionFilter },
     { provide: APP_FILTER, useClass: HttpExceptionFilter },
     { provide: APP_INTERCEPTOR, useClass: TimeoutInterceptor },
-    {
-      provide: PrismaService,
-      useValue: PrismaService.register(),
-    },
+
+    PrismaService,
   ],
 
   exports: [PrismaService],

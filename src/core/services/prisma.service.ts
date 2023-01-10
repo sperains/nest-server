@@ -1,15 +1,42 @@
-import { INestApplication, OnModuleInit, Injectable } from '@nestjs/common';
-import { PrismaClient } from '@prisma/client';
-import { PrismaClientOptions } from '@prisma/client/runtime';
-import { LoggerOptions } from 'winston';
-
-export type PrismaServiceOptions = {
-  options?: PrismaClientOptions;
-  logger?: LoggerOptions;
-};
+import {
+  INestApplication,
+  Inject,
+  Injectable,
+  OnModuleInit,
+} from '@nestjs/common';
+import { Prisma, PrismaClient } from '@prisma/client';
+import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
+import { Logger } from 'winston';
 
 @Injectable()
 export class PrismaService extends PrismaClient implements OnModuleInit {
+  constructor(@Inject(WINSTON_MODULE_PROVIDER) logger: Logger) {
+    super({
+      log: [
+        {
+          level: 'query',
+          emit: 'event',
+        },
+      ],
+    });
+
+    this.$on<any>('query', (event: Prisma.QueryEvent) => {
+      logger.info(
+        `Query: ${event.query} Params: ${event.params} Duration: ${event.duration}ms`,
+      );
+    });
+    this.$use(async (params: Prisma.MiddlewareParams, next) => {
+      const before = Date.now();
+      const result = await next(params);
+      const after = Date.now();
+      logger.info(
+        `Query ${params.model}.${params.action} took ${after - before}ms`,
+      );
+      logger.info(`Result ${JSON.stringify(result)}`);
+      return result;
+    });
+  }
+
   async onModuleInit() {
     await this.$connect();
   }
@@ -18,13 +45,5 @@ export class PrismaService extends PrismaClient implements OnModuleInit {
     this.$on('beforeExit', async () => {
       await app.close();
     });
-  }
-
-  static register(): PrismaService {
-    const prisma = new PrismaService({
-      log: ['query', 'error', 'info', 'warn'],
-    });
-
-    return prisma;
   }
 }
