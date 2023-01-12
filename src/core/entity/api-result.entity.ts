@@ -1,8 +1,13 @@
+import { ApiProperty } from '@nestjs/swagger';
+
 export class ApiResult<T = unknown> {
+  @ApiProperty()
   code: number;
 
+  @ApiProperty()
   data: T;
 
+  @ApiProperty()
   msg?: string;
 
   constructor(partial?: Partial<ApiResult<T>>) {

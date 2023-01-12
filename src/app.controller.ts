@@ -1,5 +1,6 @@
 import { Controller, Get, HttpException, HttpStatus } from '@nestjs/common';
 import { AppService } from './app.service';
+import { ApiMessage } from './core/decorator/api-message.decorator';
 
 @Controller()
 export class AppController {
@@ -14,9 +15,9 @@ export class AppController {
   getError() {
     console.log('bad gateway');
 
-    console.log((null as any).toString());
+    // console.log((null as any).toString());
 
-    return new HttpException('bad gateway', HttpStatus.BAD_GATEWAY);
+    throw new HttpException('bad gateway', HttpStatus.BAD_GATEWAY);
   }
 
   @Get('timeout')
@@ -24,6 +25,12 @@ export class AppController {
     await sleep(3000);
 
     return 'sleep';
+  }
+
+  @Get('api-msg')
+  @ApiMessage('hello world')
+  apiMessage() {
+    return 'api message from decorator';
   }
 }
 

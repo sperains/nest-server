@@ -19,7 +19,7 @@ const REQUEST_TIMEOUT = 10 * 1000;
 @Injectable()
 export class TimeoutInterceptor implements NestInterceptor {
   intercept(
-    context: ExecutionContext,
+    _context: ExecutionContext,
     next: CallHandler<any>,
   ): Observable<any> | Promise<Observable<any>> {
     return next.handle().pipe(

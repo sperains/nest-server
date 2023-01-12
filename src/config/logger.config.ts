@@ -2,6 +2,7 @@ import { WinstonModuleOptions } from 'nest-winston';
 import { format, LoggerOptions, transports } from 'winston';
 
 const customFormat = format.combine(
+  format.colorize(),
   format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
   format.align(),
   format.printf((i) => `${i.level}: ${[i.timestamp]} ${i.message}`),

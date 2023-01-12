@@ -7,6 +7,8 @@ import {
 import { VersioningType, VERSION_NEUTRAL } from '@nestjs/common';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 import { PrismaService } from './core/services/prisma.service';
+import { swaggerSetup } from './config/swagger.config';
+import { TransformInterceptor } from './core/interceptors/transform.interceptor';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestFastifyApplication>(
@@ -28,11 +30,14 @@ async function bootstrap() {
     credentials: true,
   });
 
+  swaggerSetup(app);
+
   app.useLogger(app.get(WINSTON_MODULE_NEST_PROVIDER));
 
   const prismaService = app.get(PrismaService);
+
   await prismaService.enableShutdownHooks(app);
 
-  await app.listen(3000, '0.0.0.0');
+  await app.listen(3010, '0.0.0.0');
 }
 bootstrap();

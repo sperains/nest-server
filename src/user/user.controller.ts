@@ -1,13 +1,20 @@
+import { ApiResultResponse } from '@/core/decorator/api-result-response.decorator';
 import {
+  Body,
   ClassSerializerInterceptor,
   Controller,
   Get,
+  Post,
+  Query,
   UseInterceptors,
   Version,
 } from '@nestjs/common';
-import { UserService } from './user.service';
+import { ApiCreatedResponse, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { Exclude } from 'class-transformer';
 import { ApiResult } from 'src/core/entity/api-result.entity';
+import { CreateUserDto } from './dto/create-user.dto';
+import { SexEnum } from './dto/sex.enum';
+import { UserService } from './user.service';
 
 @Controller('user')
 export class UserController {
@@ -15,7 +22,8 @@ export class UserController {
 
   @Version('2')
   @Get()
-  getAll() {
+  @ApiResultResponse(CreateUserDto)
+  getAll(@Body() createUserDto: CreateUserDto) {
     return this.userService.getAll();
   }
 
@@ -35,6 +43,22 @@ export class UserController {
     });
 
     return ApiResult.Ok(user);
+  }
+
+  @Post('/post')
+  @ApiCreatedResponse({
+    description: '成功时返回',
+    type: CreateUserDto,
+  })
+  create(@Body() createUserDto: CreateUserDto) {
+    return createUserDto;
+  }
+
+  @Get('/queryByEnum')
+  @ApiTags('test')
+  @ApiQuery({ name: 'sex', enum: SexEnum })
+  queryByEnum(@Query('sex') sex: SexEnum) {
+    return sex;
   }
 }
 
