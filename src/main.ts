@@ -1,14 +1,15 @@
+import { VersioningType, VERSION_NEUTRAL } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
 import {
   FastifyAdapter,
   NestFastifyApplication,
 } from '@nestjs/platform-fastify';
-import { VersioningType, VERSION_NEUTRAL } from '@nestjs/common';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
-import { PrismaService } from './core/services/prisma.service';
+import { AppModule } from './app.module';
+import configuration, { ApplicationConfig } from './config/configuration';
 import { swaggerSetup } from './config/swagger.config';
-import { TransformInterceptor } from './core/interceptors/transform.interceptor';
+import { PrismaService } from './core/services/prisma.service';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestFastifyApplication>(
@@ -38,6 +39,12 @@ async function bootstrap() {
 
   await prismaService.enableShutdownHooks(app);
 
-  await app.listen(3010, '0.0.0.0');
+  const configService = app.get(ConfigService);
+
+  const config = configService.get<ApplicationConfig>(configuration.KEY);
+
+  const port = config?.server.port || 3010;
+
+  await app.listen(port, '0.0.0.0');
 }
 bootstrap();

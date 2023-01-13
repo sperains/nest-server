@@ -1,22 +1,31 @@
-import { Controller, Get, HttpException, HttpStatus } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  HttpException,
+  HttpStatus,
+  Inject,
+} from '@nestjs/common';
+import { ConfigType } from '@nestjs/config';
 import { AppService } from './app.service';
+import configuration from './config/configuration';
 import { ApiMessage } from './core/decorator/api-message.decorator';
 
 @Controller()
 export class AppController {
-  constructor(private readonly appService: AppService) {}
+  constructor(
+    private readonly appService: AppService,
+    @Inject(configuration.KEY)
+    private readonly config: ConfigType<typeof configuration>,
+  ) {}
 
   @Get()
   getHello(): string {
+    console.log(this.config);
     return this.appService.getHello();
   }
 
   @Get('error')
   getError() {
-    console.log('bad gateway');
-
-    // console.log((null as any).toString());
-
     throw new HttpException('bad gateway', HttpStatus.BAD_GATEWAY);
   }
 

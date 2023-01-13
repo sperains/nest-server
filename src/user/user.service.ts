@@ -1,10 +1,28 @@
 import { PrismaService } from '@/core/services/prisma.service';
 import { Injectable } from '@nestjs/common';
-import { Prisma, User } from '@prisma/client';
+import { ConfigService } from '@nestjs/config';
+import { User } from '@prisma/client';
 
 @Injectable()
 export class UserService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+
+    private readonly config: ConfigService,
+  ) {}
+
+  private readonly users = [
+    {
+      userId: 1,
+      username: 'sperains',
+      password: '1300',
+    },
+    {
+      userId: 2,
+      username: 'zhangsan',
+      password: 'guest',
+    },
+  ];
 
   async getAll(): Promise<User[]> {
     const userList = await this.prisma.user.findMany({
@@ -16,5 +34,9 @@ export class UserService {
     });
 
     return userList;
+  }
+
+  async findOne(username: string) {
+    return this.users.find((user) => user.username === username);
   }
 }
