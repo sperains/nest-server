@@ -17,11 +17,20 @@ model User {
 }
 
 model UserIdentity {
-  id            Int    @id @default(autoincrement())
+  id            Int          @id @default(autoincrement())
   user_id       Int
-  identity_type String
+  identity_type IdentityType @default(Account)
+  // 登录方式的唯一识别码
   identifier    String
+  // 登录方式的密码
   credential    String
 
+  @@unique([user_id, identity_type], name: "user_identity_type")
   @@map("user_identity")
+}
+
+enum IdentityType {
+  Account
+  Weixin
+  Weibo
 }

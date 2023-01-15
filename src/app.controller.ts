@@ -9,6 +9,7 @@ import { ConfigType } from '@nestjs/config';
 import { AppService } from './app.service';
 import configuration from './config/configuration';
 import { ApiMessage } from './core/decorator/api-message.decorator';
+import { Public } from './core/decorator/public.decorator';
 
 @Controller()
 export class AppController {
@@ -19,6 +20,7 @@ export class AppController {
   ) {}
 
   @Get()
+  @Public()
   getHello(): string {
     console.log(this.config);
     return this.appService.getHello();

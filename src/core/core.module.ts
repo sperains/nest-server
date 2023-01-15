@@ -1,6 +1,6 @@
 import loggerConfig from '@/config/logger.config';
 import { Global, Module } from '@nestjs/common';
-import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
+import { APP_FILTER, APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 import { WinstonModule } from 'nest-winston';
 import { AllExceptionFilter } from './filters/all-exception.filter';
 import { HttpExceptionFilter } from './filters/http-exception.filter';
@@ -9,6 +9,7 @@ import { TransformInterceptor } from './interceptors/transform.interceptor';
 import { PrismaService } from './services/prisma.service';
 import { ConfigModule } from '@nestjs/config';
 import configuration from '@/config/configuration';
+import { JwtAuthGuard } from '@/auth/guards/jwt-auth.guard';
 
 @Global()
 @Module({
@@ -21,6 +22,8 @@ import configuration from '@/config/configuration';
     { provide: APP_FILTER, useClass: HttpExceptionFilter },
     { provide: APP_INTERCEPTOR, useClass: TimeoutInterceptor },
     { provide: APP_INTERCEPTOR, useClass: TransformInterceptor },
+
+    { provide: APP_GUARD, useClass: JwtAuthGuard },
 
     PrismaService,
   ],

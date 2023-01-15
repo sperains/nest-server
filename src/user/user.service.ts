@@ -1,28 +1,11 @@
 import { PrismaService } from '@/core/services/prisma.service';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { User } from '@prisma/client';
+import { IdentityType, User } from '@prisma/client';
 
 @Injectable()
 export class UserService {
-  constructor(
-    private readonly prisma: PrismaService,
-
-    private readonly config: ConfigService,
-  ) {}
-
-  private readonly users = [
-    {
-      userId: 1,
-      username: 'sperains',
-      password: '1300',
-    },
-    {
-      userId: 2,
-      username: 'zhangsan',
-      password: 'guest',
-    },
-  ];
+  constructor(private readonly prisma: PrismaService) {}
 
   async getAll(): Promise<User[]> {
     const userList = await this.prisma.user.findMany({
@@ -37,6 +20,24 @@ export class UserService {
   }
 
   async findOne(username: string) {
-    return this.users.find((user) => user.username === username);
+    const user = await this.prisma.user.findFirstOrThrow({
+      where: {
+        username: username,
+      },
+    });
+
+    return user;
+  }
+
+  async findUserIdentity(
+    userId: number,
+    identity_type: IdentityType = 'Account',
+  ) {
+    return await this.prisma.userIdentity.findFirstOrThrow({
+      where: {
+        user_id: userId,
+        identity_type,
+      },
+    });
   }
 }

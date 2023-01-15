@@ -1,4 +1,5 @@
 import { Prisma, PrismaClient } from '@prisma/client';
+import { IdentityType } from '../src/auth';
 
 /**
  * 通过prisma生成数据库基础数据
@@ -18,7 +19,7 @@ prisma.$on('query', (e) => {
 });
 
 const main = async () => {
-  await prisma.user.upsert({
+  const user = await prisma.user.upsert({
     where: {
       username: 'sperains',
     },
@@ -29,6 +30,21 @@ const main = async () => {
       avatar: '122',
       username: 'sperains',
       nickname: 'zhangsan',
+    },
+  });
+
+  await prisma.userIdentity.upsert({
+    where: {
+      user_identity_type: {
+        user_id: user.id,
+        identity_type: IdentityType.Account,
+      },
+    },
+    update: {},
+    create: {
+      user_id: user.id,
+      identifier: 'sperains',
+      credential: '1300',
     },
   });
 

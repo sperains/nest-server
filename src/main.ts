@@ -45,6 +45,8 @@ async function bootstrap() {
 
   const port = config?.server.port || 3010;
 
+  console.log(process.env.JWT_SECRET);
+
   await app.listen(port, '0.0.0.0');
 }
 bootstrap();
