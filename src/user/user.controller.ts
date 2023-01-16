@@ -1,15 +1,20 @@
 import { ApiResultResponse } from '@/core/decorator/api-result-response.decorator';
+import { Public } from '@/core/decorator/public.decorator';
+import { PrismaService } from '@/core/services/prisma.service';
 import {
   Body,
   ClassSerializerInterceptor,
   Controller,
   Get,
+  Param,
   Post,
   Query,
   UseInterceptors,
   Version,
 } from '@nestjs/common';
 import { ApiCreatedResponse, ApiQuery, ApiTags } from '@nestjs/swagger';
+import { IdentityType } from '@prisma/client';
+import { compare, getRounds } from 'bcrypt';
 import { Exclude } from 'class-transformer';
 import { ApiResult } from 'src/core/entity/api-result.entity';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -18,7 +23,10 @@ import { UserService } from './user.service';
 
 @Controller('user')
 export class UserController {
-  constructor(private userService: UserService) {}
+  constructor(
+    private userService: UserService,
+    private prisma: PrismaService,
+  ) {}
 
   @Version('2')
   @Get()
@@ -59,6 +67,30 @@ export class UserController {
   @ApiQuery({ name: 'sex', enum: SexEnum })
   queryByEnum(@Query('sex') sex: SexEnum) {
     return sex;
+  }
+
+  @Public()
+  @Get('check')
+  async checkPassword(@Query('username') username: string) {
+    const user = await this.prisma.user.findUniqueOrThrow({
+      where: {
+        username: username,
+      },
+    });
+
+    const userIdentity = await this.prisma.userIdentity.findUniqueOrThrow({
+      where: {
+        user_identity_type: {
+          user_id: user.id,
+          identity_type: IdentityType.Account,
+        },
+      },
+    });
+
+    return {
+      round: getRounds(userIdentity.credential),
+      verified: compare('1300', userIdentity.credential),
+    };
   }
 }
 

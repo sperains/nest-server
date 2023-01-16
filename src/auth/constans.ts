@@ -5,3 +5,5 @@ export const jwtConstants = {
 // 默认有效期7天，Eg: 60, "2 days", "10h", "7d"
 
 export const EXPIRES_IN = '7 days';
+
+export const SALT_OR_ROUND = 10;

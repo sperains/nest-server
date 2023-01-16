@@ -1,4 +1,6 @@
-import { Prisma, PrismaClient } from '@prisma/client';
+import { SALT_OR_ROUND } from '../src/auth/constans';
+import { PrismaClient } from '@prisma/client';
+import { hash } from 'bcrypt';
 import { IdentityType } from '../src/auth';
 
 /**
@@ -40,26 +42,30 @@ const main = async () => {
         identity_type: IdentityType.Account,
       },
     },
-    update: {},
+    update: {
+      user_id: user.id,
+      identifier: 'sperains',
+      credential: await hash('1300', SALT_OR_ROUND),
+    },
     create: {
       user_id: user.id,
       identifier: 'sperains',
-      credential: '1300',
+      credential: await hash('1300', SALT_OR_ROUND),
     },
   });
 
-  const users: Prisma.UserCreateInput[] = [];
+  // const users: Prisma.UserCreateInput[] = [];
 
-  for (let i = 0; i < 100; i++) {
-    users.push({
-      username: `sperains_${i}`,
-      nickname: `s_${i}`,
-    });
-  }
+  // for (let i = 0; i < 100; i++) {
+  //   users.push({
+  //     username: `sperains_${i}`,
+  //     nickname: `s_${i}`,
+  //   });
+  // }
 
-  await prisma.user.createMany({
-    data: users,
-  });
+  // await prisma.user.createMany({
+  //   data: users,
+  // });
 };
 
 main()
