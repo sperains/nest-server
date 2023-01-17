@@ -27,7 +27,7 @@ export class LoggingInterceptor implements NestInterceptor {
       .pipe(
         tap(() =>
           this.logger.info(
-            `Request ${request.url} ${request.method} takes ${
+            `${request.method} Request ${request.url} takes ${
               Date.now() - now
             }ms`,
           ),
