@@ -4,7 +4,7 @@ import { mergeWith, MergeWithCustomizer } from 'lodash';
 export const APPLICATION_CONFIG_KEY = 'APPLICATION_CONFIG';
 
 export default registerAs(APPLICATION_CONFIG_KEY, () => {
-  if (process.env.ACTIVE_PROFILE != 'prod') {
+  if (process.env.ACTIVE_PROFILE === 'prod') {
     return mergeWith(productionConfig, defaultConfig, customMerge);
   }
   return mergeWith(developmentConfig, defaultConfig, customMerge);

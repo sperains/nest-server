@@ -15,13 +15,23 @@ export class LoggingInterceptor implements NestInterceptor {
     @Inject(WINSTON_MODULE_PROVIDER) private readonly logger: Logger,
   ) {}
 
-  intercept(_context: ExecutionContext, next: CallHandler): Observable<any> {
-    this.logger.info('Before');
-
+  intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
     const now = Date.now();
+
+    const ctx = context.switchToHttp();
+
+    const request = ctx.getRequest<Request>();
 
     return next
       .handle()
-      .pipe(tap(() => this.logger.info(`After... ${Date.now() - now}ms`)));
+      .pipe(
+        tap(() =>
+          this.logger.info(
+            `Request ${request.url} ${request.method} takes ${
+              Date.now() - now
+            }ms`,
+          ),
+        ),
+      );
   }
 }
