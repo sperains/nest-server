@@ -10,6 +10,7 @@ import { AppModule } from './app.module';
 import configuration, { ApplicationConfig } from './config/configuration';
 import { swaggerSetup } from './config/swagger.config';
 import { PrismaService } from './core/services/prisma.service';
+import FastifyMultipart from '@fastify/multipart';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestFastifyApplication>(
@@ -34,6 +35,10 @@ async function bootstrap() {
   swaggerSetup(app);
 
   app.useLogger(app.get(WINSTON_MODULE_NEST_PROVIDER));
+
+  app.register(FastifyMultipart, {
+    addToBody: true,
+  });
 
   const prismaService = app.get(PrismaService);
 

@@ -1,15 +1,20 @@
 import {
+  Body,
   Controller,
   Get,
   HttpException,
   HttpStatus,
   Inject,
+  Post,
 } from '@nestjs/common';
 import { ConfigType } from '@nestjs/config';
+import { createWriteStream, existsSync, mkdirSync } from 'fs';
+import { join } from 'path';
 import { AppService } from './app.service';
 import configuration from './config/configuration';
 import { ApiMessage } from './core/decorator/api-message.decorator';
 import { Public } from './core/decorator/public.decorator';
+import { MultipartFile } from './core/types';
 
 @Controller()
 export class AppController {
@@ -42,6 +47,29 @@ export class AppController {
   @ApiMessage('hello world')
   apiMessage() {
     return 'api message from decorator';
+  }
+
+  @Public()
+  @Post('upload')
+  async fileUpload(@Body('file') files: MultipartFile[]) {
+    files.forEach((file) => {
+      const { filename, data } = file;
+
+      const path = join(process.cwd(), 'static');
+
+      if (!existsSync(path)) {
+        mkdirSync(path, { recursive: true });
+      }
+
+      const stream = createWriteStream(join(path, filename));
+
+      stream.write(data);
+      stream.end();
+    });
+
+    return {
+      hello: 'world',
+    };
   }
 }
 

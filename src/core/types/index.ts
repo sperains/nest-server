@@ -3,3 +3,11 @@ export type Without<T, U> = { [P in Exclude<keyof T, keyof U>]?: never };
 
 // 定义互斥类型，T或U只有一个能出现（互相剔除时，被剔除方必须存在）
 export type XOR<T, U> = (Without<T, U> & U) | (Without<U, T> & T);
+
+export type MultipartFile = {
+  data: Buffer;
+  filename: string;
+  encoding: string;
+  mimetype: string;
+  limit: boolean;
+};

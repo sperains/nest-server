@@ -10,12 +10,15 @@ import { PrismaService } from './services/prisma.service';
 import { ConfigModule } from '@nestjs/config';
 import configuration from '@/config/configuration';
 import { JwtAuthGuard } from '@/auth/guards/jwt-auth.guard';
+import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
+import rateLimitConfig from '@/config/rate-limit.config';
 
 @Global()
 @Module({
   imports: [
     WinstonModule.forRoot(loggerConfig),
     ConfigModule.forRoot({ load: [configuration], isGlobal: true }),
+    ThrottlerModule.forRoot(rateLimitConfig),
   ],
   providers: [
     { provide: APP_FILTER, useClass: AllExceptionFilter },
@@ -24,6 +27,7 @@ import { JwtAuthGuard } from '@/auth/guards/jwt-auth.guard';
     { provide: APP_INTERCEPTOR, useClass: TransformInterceptor },
 
     { provide: APP_GUARD, useClass: JwtAuthGuard },
+    { provide: APP_GUARD, useClass: ThrottlerGuard },
 
     PrismaService,
   ],
