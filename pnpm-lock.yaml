@@ -11,6 +11,7 @@ specifiers:
   '@nestjs/platform-fastify': ^9.2.1
   '@nestjs/platform-socket.io': ^9.2.1
   '@nestjs/schematics': ^9.0.4
+  '@nestjs/serve-static': ^3.0.0
   '@nestjs/swagger': ^6.1.4
   '@nestjs/testing': ^9.2.1
   '@nestjs/throttler': ^3.1.0
@@ -18,6 +19,7 @@ specifiers:
   '@prisma/client': ^4.8.1
   '@types/bcrypt': ^5.0.0
   '@types/jest': 29.2.4
+  '@types/lodash': ^4.14.191
   '@types/node': 18.11.18
   '@types/passport-jwt': ^3.0.8
   '@types/passport-local': ^1.0.35
@@ -30,6 +32,7 @@ specifiers:
   eslint-config-prettier: ^8.6.0
   eslint-plugin-prettier: ^4.2.1
   jest: 29.3.1
+  lodash: ^4.17.21
   nest-winston: ^1.8.0
   passport: ^0.6.0
   passport-jwt: ^4.0.1
@@ -58,12 +61,14 @@ dependencies:
   '@nestjs/passport': registry.npmmirror.com/@nestjs/passport/9.0.0_6o47igfla2pj7yzh7agpvpttka
   '@nestjs/platform-fastify': registry.npmmirror.com/@nestjs/platform-fastify/9.2.1_hjcqpoaebdr7gdo5hgc22hthbe
   '@nestjs/platform-socket.io': registry.npmmirror.com/@nestjs/platform-socket.io/9.2.1_75thavexiqyxpvcxom3j44gxby
+  '@nestjs/serve-static': registry.npmmirror.com/@nestjs/serve-static/3.0.0_hjcqpoaebdr7gdo5hgc22hthbe
   '@nestjs/swagger': registry.npmmirror.com/@nestjs/swagger/6.1.4_g32pg2qeos5iupw3jizemof4uu
   '@nestjs/throttler': registry.npmmirror.com/@nestjs/throttler/3.1.0_dntc3uqqknzoduyjojusds5kla
   '@nestjs/websockets': registry.npmmirror.com/@nestjs/websockets/9.2.1_cbx4gblrpxxed5smhozfworgty
   '@prisma/client': registry.npmmirror.com/@prisma/client/4.8.1_prisma@4.8.1
   bcrypt: registry.npmmirror.com/bcrypt/5.1.0
   class-transformer: registry.npmmirror.com/class-transformer/0.5.1
+  lodash: registry.npmmirror.com/lodash/4.17.21
   nest-winston: registry.npmmirror.com/nest-winston/1.8.0_xlxfmi5fzr5alofp25xqzclqqq
   passport: registry.npmmirror.com/passport/0.6.0
   passport-jwt: registry.npmmirror.com/passport-jwt/4.0.1
@@ -80,6 +85,7 @@ devDependencies:
   '@nestjs/testing': registry.npmmirror.com/@nestjs/testing/9.2.1_hjcqpoaebdr7gdo5hgc22hthbe
   '@types/bcrypt': registry.npmmirror.com/@types/bcrypt/5.0.0
   '@types/jest': registry.npmmirror.com/@types/jest/29.2.4
+  '@types/lodash': registry.npmmirror.com/@types/lodash/4.14.191
   '@types/node': registry.npmmirror.com/@types/node/18.11.18
   '@types/passport-jwt': registry.npmmirror.com/@types/passport-jwt/3.0.8
   '@types/passport-local': registry.npmmirror.com/@types/passport-local/1.0.35
@@ -1372,6 +1378,20 @@ packages:
       - chokidar
     dev: true
 
+  registry.npmmirror.com/@nestjs/serve-static/3.0.0_hjcqpoaebdr7gdo5hgc22hthbe:
+    resolution: {integrity: sha512-TpXjgs4136dQqWUjEcONqppqXDsrJhRkmKWzuBMOUAnP4HjHpNmlycvkHnDnWSoG2YD4a7Enh4ViYGWqCfHStA==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@nestjs/serve-static/-/serve-static-3.0.0.tgz}
+    id: registry.npmmirror.com/@nestjs/serve-static/3.0.0
+    name: '@nestjs/serve-static'
+    version: 3.0.0
+    peerDependencies:
+      '@nestjs/common': ^9.0.0
+      '@nestjs/core': ^9.0.0
+    dependencies:
+      '@nestjs/common': registry.npmmirror.com/@nestjs/common/9.2.1_ew7gazwbjf4vlpfvmmn4v2vvei
+      '@nestjs/core': registry.npmmirror.com/@nestjs/core/9.2.1_gs3k642xgyjax3mvj2n3wicqwi
+      path-to-regexp: registry.npmmirror.com/path-to-regexp/0.2.5
+    dev: false
+
   registry.npmmirror.com/@nestjs/swagger/6.1.4_g32pg2qeos5iupw3jizemof4uu:
     resolution: {integrity: sha512-kE8VjR+NaoKqxg8XqM/YYfALScPh4AcoR8Wywga8/OxHsTHY+MKxqvTpWp7IhCUWSA6xT8nQUpcC9Rt7C+r7Hw==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@nestjs/swagger/-/swagger-6.1.4.tgz}
     id: registry.npmmirror.com/@nestjs/swagger/6.1.4
@@ -1760,6 +1780,12 @@ packages:
     version: 8.5.9
     dependencies:
       '@types/node': registry.npmmirror.com/@types/node/18.11.18
+
+  registry.npmmirror.com/@types/lodash/4.14.191:
+    resolution: {integrity: sha512-BdZ5BCCvho3EIXw6wUCXHe7rS53AIDPLE+JzwgT+OsJk53oBfbSmZZ7CX4VaRoN78N+TJpFi9QPlfIVNmJYWxQ==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@types/lodash/-/lodash-4.14.191.tgz}
+    name: '@types/lodash'
+    version: 4.14.191
+    dev: true
 
   registry.npmmirror.com/@types/mime/3.0.1:
     resolution: {integrity: sha512-Y4XFY5VJAuw0FgAqPNd6NNoV44jbq9Bz2L7Rh/J6jLTiHBSBJa9fxqQIvkIld4GsoDOcCbvzOUAbLPsSKKg+uA==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@types/mime/-/mime-3.0.1.tgz}
@@ -5667,6 +5693,12 @@ packages:
     name: path-parse
     version: 1.0.7
     dev: true
+
+  registry.npmmirror.com/path-to-regexp/0.2.5:
+    resolution: {integrity: sha512-l6qtdDPIkmAmzEO6egquYDfqQGPMRNGjYtrU13HAXb3YSRrt7HSb1sJY0pKp6o2bAa86tSB6iwaW2JbthPKr7Q==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/path-to-regexp/-/path-to-regexp-0.2.5.tgz}
+    name: path-to-regexp
+    version: 0.2.5
+    dev: false
 
   registry.npmmirror.com/path-to-regexp/3.2.0:
     resolution: {integrity: sha512-jczvQbCUS7XmS7o+y1aEO9OBVFeZBQ1MDSEqmO7xSoPgOPoowY/SxLpZ6Vh97/8qHZOteiCKb7gkG9gA2ZUxJA==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/path-to-regexp/-/path-to-regexp-3.2.0.tgz}

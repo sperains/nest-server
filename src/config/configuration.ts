@@ -1,41 +1,47 @@
 import { registerAs } from '@nestjs/config';
+import { mergeWith, MergeWithCustomizer } from 'lodash';
 
-export default registerAs('config', () => {
-  console.log(process.env.ACTIVE_PROFILE);
-  if (process.env.ACTIVE_PROFILE == 'dev') {
-    return developmentConfig;
+export const APPLICATION_CONFIG_KEY = 'APPLICATION_CONFIG';
+
+export default registerAs(APPLICATION_CONFIG_KEY, () => {
+  if (process.env.ACTIVE_PROFILE != 'prod') {
+    return mergeWith(productionConfig, defaultConfig, customMerge);
   }
-
-  if (process.env.ACTIVE_PROFILE == 'prod') {
-    return productionConfig;
-  }
-
-  return process.env.NODE_ENV !== 'production'
-    ? developmentConfig
-    : productionConfig;
+  return mergeWith(developmentConfig, defaultConfig, customMerge);
 });
 
-const developmentConfig: Partial<ApplicationConfig> = {
+// 若当前环境变量未设置则使用默认配置
+const customMerge: MergeWithCustomizer = (value, srcValue) => {
+  return value ?? srcValue;
+};
+
+const defaultConfig: ApplicationConfig = {
   database: {
     url: 'postgresql://sperains:@localhost:5432/nest-server?schema=public',
   },
   redis: {
-    host: '',
-    port: '',
+    host: 'localhost',
+    port: 6379,
   },
   server: {
     port: 3010,
   },
+  upload: {
+    path: 'upload',
+  },
+  static: {
+    rootPath: 'static',
+    serveRoot: '/static',
+  },
+};
+
+const developmentConfig: Partial<ApplicationConfig> = {
+  server: {
+    port: 3012,
+  },
 };
 
 const productionConfig: Partial<ApplicationConfig> = {
-  database: {
-    url: 'postgresql://sperains:@localhost:5432/nest-server?schema=public',
-  },
-  redis: {
-    host: '',
-    port: '',
-  },
   server: {
     port: 8080,
   },
@@ -46,5 +52,12 @@ export type ApplicationConfig = {
   redis: { host: string; port: number | string };
   server: {
     port: number | string;
+  };
+  upload: {
+    path: string;
+  };
+  static: {
+    rootPath: string;
+    serveRoot: string;
   };
 };

@@ -1,3 +1,4 @@
+import FastifyMultipart from '@fastify/multipart';
 import { VersioningType, VERSION_NEUTRAL } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
@@ -5,12 +6,14 @@ import {
   FastifyAdapter,
   NestFastifyApplication,
 } from '@nestjs/platform-fastify';
-import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
+import { WinstonLogger, WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 import { AppModule } from './app.module';
-import configuration, { ApplicationConfig } from './config/configuration';
+import {
+  ApplicationConfig,
+  APPLICATION_CONFIG_KEY,
+} from './config/configuration';
 import { swaggerSetup } from './config/swagger.config';
 import { PrismaService } from './core/services/prisma.service';
-import FastifyMultipart from '@fastify/multipart';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestFastifyApplication>(
@@ -32,10 +35,14 @@ async function bootstrap() {
     credentials: true,
   });
 
+  // 设置swagger
   swaggerSetup(app);
 
-  app.useLogger(app.get(WINSTON_MODULE_NEST_PROVIDER));
+  const logger = app.get<WinstonLogger>(WINSTON_MODULE_NEST_PROVIDER);
 
+  app.useLogger(logger);
+
+  // 设置文件上传
   app.register(FastifyMultipart, {
     addToBody: true,
   });
@@ -46,12 +53,12 @@ async function bootstrap() {
 
   const configService = app.get(ConfigService);
 
-  const config = configService.get<ApplicationConfig>(configuration.KEY);
+  const config = configService.get<ApplicationConfig>(APPLICATION_CONFIG_KEY);
 
   const port = config?.server.port || 3010;
 
-  console.log(process.env.JWT_SECRET);
-
   await app.listen(port, '0.0.0.0');
+
+  logger.log(`server listen at http://localhost:${port}`);
 }
 bootstrap();
