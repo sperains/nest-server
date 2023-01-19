@@ -23,6 +23,7 @@
     "seed": "ts-node prisma/seed.ts"
   },
   "dependencies": {
+    "@fastify/compress": "^6.2.0",
     "@fastify/multipart": "^7.4.0",
     "@nestjs/common": "^9.2.1",
     "@nestjs/config": "^2.2.0",

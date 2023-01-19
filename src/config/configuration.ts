@@ -1,5 +1,5 @@
 import { registerAs } from '@nestjs/config';
-import { mergeWith, MergeWithCustomizer } from 'lodash';
+import { MergeWithCustomizer, mergeWith } from 'lodash';
 
 export const APPLICATION_CONFIG_KEY = 'APPLICATION_CONFIG';
 

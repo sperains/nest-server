@@ -1,3 +1,4 @@
+import compression from '@fastify/compress';
 import FastifyMultipart from '@fastify/multipart';
 import { VersioningType, VERSION_NEUTRAL } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
@@ -46,6 +47,9 @@ async function bootstrap() {
   app.register(FastifyMultipart, {
     addToBody: true,
   });
+
+  // 设置压缩
+  app.register(compression, { encodings: ['gzip', 'deflate'] });
 
   const prismaService = app.get(PrismaService);
 
