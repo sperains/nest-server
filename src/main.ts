@@ -1,6 +1,3 @@
-import compression from '@fastify/compress';
-import FastifyMultipart from '@fastify/multipart';
-import { VersioningType, VERSION_NEUTRAL } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
 import {
@@ -13,8 +10,7 @@ import {
   ApplicationConfig,
   APPLICATION_CONFIG_KEY,
 } from './config/configuration';
-import { swaggerSetup } from './config/swagger.config';
-import { PrismaService } from './core/services/prisma.service';
+import registerPlugins from './plugins';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestFastifyApplication>(
@@ -24,36 +20,10 @@ async function bootstrap() {
     }),
   );
 
-  app.enableVersioning({
-    defaultVersion: VERSION_NEUTRAL,
-    type: VersioningType.URI,
-  });
-
-  // 跨域设置
-  app.enableCors({
-    origin: '*',
-    methods: '*',
-    credentials: true,
-  });
-
-  // 设置swagger
-  swaggerSetup(app);
+  await registerPlugins(app);
 
   const logger = app.get<WinstonLogger>(WINSTON_MODULE_NEST_PROVIDER);
-
   app.useLogger(logger);
-
-  // 设置文件上传
-  app.register(FastifyMultipart, {
-    addToBody: true,
-  });
-
-  // 设置压缩
-  app.register(compression, { encodings: ['gzip', 'deflate'] });
-
-  const prismaService = app.get(PrismaService);
-
-  await prismaService.enableShutdownHooks(app);
 
   const configService = app.get(ConfigService);
 
