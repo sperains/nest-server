@@ -5,7 +5,7 @@ import {
   NestFastifyApplication,
 } from '@nestjs/platform-fastify';
 import { WinstonLogger, WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
-import { AppModule } from './app.module';
+import { AppModule } from './app/app.module';
 import {
   ApplicationConfig,
   APPLICATION_CONFIG_KEY,

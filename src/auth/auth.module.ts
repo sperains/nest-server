@@ -1,4 +1,4 @@
-import { UserService } from '@/user/user.service';
+import { UserService } from '@/api/user/user.service';
 import { Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';

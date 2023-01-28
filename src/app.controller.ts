@@ -6,6 +6,7 @@ import {
   HttpStatus,
   Inject,
   Post,
+  Render,
 } from '@nestjs/common';
 import { ConfigType } from '@nestjs/config';
 import { createWriteStream, existsSync, mkdirSync } from 'fs';
@@ -69,6 +70,15 @@ export class AppController {
 
     return {
       hello: 'world',
+    };
+  }
+
+  @Public()
+  @Render('index.hbs')
+  @Get('mvc')
+  renderIndex() {
+    return {
+      message: 'hello world',
     };
   }
 }

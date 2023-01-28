@@ -4,8 +4,18 @@ import FastifyMultipart from '@fastify/multipart';
 import { VersioningType, VERSION_NEUTRAL } from '@nestjs/common';
 import { swaggerSetup } from '@/config/swagger.config';
 import { PrismaService } from '@/core/services/prisma.service';
+import { ConfigService } from '@nestjs/config';
+import {
+  ApplicationConfig,
+  APPLICATION_CONFIG_KEY,
+} from '@/config/configuration';
+import { join } from 'path';
 
 const registerPlugins = async (app: NestFastifyApplication) => {
+  const configService = app.get(ConfigService);
+
+  const config = configService.get<ApplicationConfig>(APPLICATION_CONFIG_KEY);
+
   // 设置压缩
   app.register(compression, { encodings: ['gzip', 'deflate'] });
 
@@ -25,6 +35,19 @@ const registerPlugins = async (app: NestFastifyApplication) => {
     origin: '*',
     methods: '*',
     credentials: true,
+  });
+
+  // 设置mvc
+  app.useStaticAssets({
+    root: join(process.cwd(), config?.static.rootPath || 'static'),
+    prefix: config?.static.serveRoot || '/static',
+  });
+
+  app.setViewEngine({
+    engine: {
+      handlebars: require('handlebars'),
+    },
+    templates: join(process.cwd(), 'views'),
   });
 
   // 设置swagger
