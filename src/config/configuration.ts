@@ -4,6 +4,10 @@ import { MergeWithCustomizer, mergeWith } from 'lodash';
 export const APPLICATION_CONFIG_KEY = 'APPLICATION_CONFIG';
 
 export default registerAs(APPLICATION_CONFIG_KEY, () => {
+  if (process.env.NODE_ENV === 'production') {
+    return mergeWith(productionConfig, defaultConfig, customMerge);
+  }
+
   if (process.env.ACTIVE_PROFILE === 'prod') {
     return mergeWith(productionConfig, defaultConfig, customMerge);
   }
@@ -25,6 +29,7 @@ const defaultConfig: ApplicationConfig = {
   },
   server: {
     port: 3010,
+    timeout: 10 * 1000,
   },
   upload: {
     path: 'upload',
@@ -47,12 +52,15 @@ const productionConfig: Partial<ApplicationConfig> = {
   },
 };
 
+export type ServerConfig = {
+  port: number | string;
+  timeout: number;
+};
+
 export type ApplicationConfig = {
   database: { url: string };
   redis: { host: string; port: number | string };
-  server: {
-    port: number | string;
-  };
+  server: Partial<ServerConfig>;
   upload: {
     path: string;
   };

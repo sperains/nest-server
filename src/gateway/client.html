@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+
+
+  <script type="importmap">
+    {
+      "imports": {
+        "socket.io-client": "https://cdn.socket.io/4.4.1/socket.io.esm.min.js"
+      }
+    }
+  </script>
+
+</head>
+<body>
+  
+  <input type="text">
+  <button>发送</button>
+
+
+  <script type="module">
+    import { io } from "socket.io-client";
+  
+    const socket = io('ws://localhost:3012');
+
+    socket.on('connect', () => {
+      console.log(socket)
+      console.log(socket.id)
+    })
+
+    socket.on('disconnect', () => {
+      console.log(socket.id, 'disconnect')
+    })
+
+    socket.emit('clientToServer', "sperains")
+
+    socket.on('message', (res) => {
+      console.log(res)
+    })
+
+    socket.on('serverToClient', (res) => {
+      console.log(res)
+    })
+
+
+
+    
+  </script>
+
+
+</body>
+</html>

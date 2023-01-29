@@ -18,6 +18,7 @@ import { Public } from './core/decorator/public.decorator';
 import { MultipartFile } from './core/types';
 
 @Controller()
+@Public()
 export class AppController {
   constructor(
     private readonly appService: AppService,

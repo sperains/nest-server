@@ -5,6 +5,7 @@ import rateLimitConfig from '@/config/rate-limit.config';
 import { Global, Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { APP_FILTER, APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
+import { ScheduleModule } from '@nestjs/schedule';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { WinstonModule } from 'nest-winston';
 import { AllExceptionFilter } from './filters/all-exception.filter';
@@ -18,8 +19,13 @@ import { PrismaService } from './services/prisma.service';
 @Module({
   imports: [
     WinstonModule.forRoot(loggerConfig),
-    ConfigModule.forRoot({ load: [configuration], isGlobal: true }),
+    ConfigModule.forRoot({
+      load: [configuration],
+      isGlobal: true,
+      cache: true,
+    }),
     ThrottlerModule.forRoot(rateLimitConfig),
+    ScheduleModule.forRoot(),
   ],
   providers: [
     { provide: APP_FILTER, useClass: AllExceptionFilter },
