@@ -39,7 +39,7 @@ module.exports = {
     production: {
       user: 'root',
       host: '106.75.246.44',
-      ref: 'origin/master',
+      ref: 'origin/main',
       repo: 'git@github.com:sperains/nest-server.git',
       path: '/opt/nest-server',
       'post-deploy':
