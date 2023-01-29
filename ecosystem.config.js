@@ -40,7 +40,7 @@ module.exports = {
       user: 'root',
       host: '106.75.246.44',
       ref: 'origin/master',
-      repo: 'https://github.com/sperains/nest-server.git ',
+      repo: 'git@github.com:sperains/nest-server.git',
       path: '/opt/nest-server',
       'post-deploy':
         'pnpm install && pnpm run build && pm2 reload ecosystem.config.js --env production',
