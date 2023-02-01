@@ -13,8 +13,8 @@ import { createWriteStream, existsSync, mkdirSync } from 'fs';
 import { join } from 'path';
 import { AppService } from './app.service';
 import configuration from './config/configuration';
-import { ApiMessage } from './core/decorator/api-message.decorator';
-import { Public } from './core/decorator/public.decorator';
+import { ApiMessage } from './core/decorators/api-message.decorator';
+import { Public } from './core/decorators/public.decorator';
 import { MultipartFile } from './core/types';
 
 @Controller()

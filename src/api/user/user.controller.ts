@@ -1,5 +1,5 @@
-import { ApiResultResponse } from '@/core/decorator/api-result-response.decorator';
-import { Public } from '@/core/decorator/public.decorator';
+import { ApiResultResponse } from '@/core/decorators/api-result-response.decorator';
+import { Public } from '@/core/decorators/public.decorator';
 import { PrismaService } from '@/core/services/prisma.service';
 import {
   Body,

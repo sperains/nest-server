@@ -6,7 +6,7 @@ import {
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { map, Observable } from 'rxjs';
-import { API_MESSAGE_META_KEY } from '../decorator/api-message.decorator';
+import { API_MESSAGE_META_KEY } from '../decorators/api-message.decorator';
 import { ApiCode } from '../enums/api-code.enum';
 
 export interface ApiResult<T> {

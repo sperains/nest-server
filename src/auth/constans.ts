@@ -7,3 +7,7 @@ export const jwtConstants = {
 export const EXPIRES_IN = '7 days';
 
 export const SALT_OR_ROUND = 10;
+
+export const JWT_STRATEGY_NAME = 'jwt';
+
+export const LOCAL_STRATEGY_NAME = 'local';

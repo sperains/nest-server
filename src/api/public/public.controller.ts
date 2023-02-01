@@ -1,4 +1,4 @@
-import { Public } from '@/core/decorator/public.decorator';
+import { Public } from '@/core/decorators/public.decorator';
 import { HttpService } from '@nestjs/axios';
 import { Controller, Get } from '@nestjs/common';
 import { catchError, firstValueFrom } from 'rxjs';

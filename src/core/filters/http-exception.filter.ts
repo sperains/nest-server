@@ -25,6 +25,8 @@ export class HttpExceptionFilter implements ExceptionFilter {
 
     this.logger.error(exception.message);
 
+    this.logger.error(exception.stack);
+
     httpAdapter.reply(ctx.getResponse(), {
       code: httpStatus,
       msg: exception.message,
