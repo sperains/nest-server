@@ -7,6 +7,7 @@ import {
   Inject,
   Post,
   Render,
+  Req,
 } from '@nestjs/common';
 import { ConfigType } from '@nestjs/config';
 import { createWriteStream, existsSync, mkdirSync } from 'fs';
@@ -49,6 +50,11 @@ export class AppController {
   @ApiMessage('hello world')
   apiMessage() {
     return 'api message from decorator';
+  }
+
+  @Get('cookie')
+  cookie(@Req() request: any) {
+    return request.cookies;
   }
 
   @Public()

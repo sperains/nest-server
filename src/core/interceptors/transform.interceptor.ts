@@ -11,6 +11,8 @@ import { ApiCode } from '../enums/api-code.enum';
 
 export interface ApiResult<T> {
   data: T;
+  code: ApiCode;
+  message: string;
 }
 
 @Injectable()

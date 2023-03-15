@@ -5,6 +5,7 @@ import { VersioningType, VERSION_NEUTRAL } from '@nestjs/common';
 import { swaggerSetup } from '@/config/swagger.config';
 import { PrismaService } from '@/core/services/prisma.service';
 import { ConfigService } from '@nestjs/config';
+import fastifyCookie from '@fastify/cookie';
 import {
   ApplicationConfig,
   APPLICATION_CONFIG_KEY,
@@ -35,6 +36,10 @@ const registerPlugins = async (app: NestFastifyApplication) => {
     origin: '*',
     methods: '*',
     credentials: true,
+  });
+
+  await app.register(fastifyCookie, {
+    secret: process.env.JWT_SECRET,
   });
 
   // 设置mvc
